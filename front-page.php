@@ -1,0 +1,457 @@
+<?php get_header()?>
+
+<main data-barba="container" data-barba-namespace="home">
+    <section class="mb-10 hero">
+    <div class="container">
+        <div class="title-wrapper">
+        <h1 class="">art & life</h1>
+        </div>
+        <div
+        class="p-1 overflow-hidden md:pl-0 md:p-3 bg-dark text-light marquee-home"
+        >
+        <p
+            class="relative mb-0 uppercase font-generalSemiBold whitespace-nowrap"
+        >
+            <small class="absolute left-0 z-40 px-5 bg-dark"
+            >News Ticker ++</small
+            >
+            <span class="inline-block marquee">
+                <span class="inline-block ml-5 font-generalRegular"><?php the_field('ticker_1')?></span
+                >
+                <span class="inline-block ml-5 font-generalRegular"><?php the_field('ticker_2')?></span
+                >
+                <span class="inline-block ml-5 font-generalRegular"><?php the_field('ticker_3')?></span
+                >
+            </span>
+        </p>
+        </div>
+    </div>
+    </section>
+
+    <?php $latest = new WP_Query(array(
+        'post_type' => 'magazines',
+        'posts_per_page' => 1
+    ))?>
+
+    <?php if($latest->have_posts()) : while($latest->have_posts()) : ($latest->the_post())?>
+
+    <section class="mb-10 feature-story">
+        <div class="container">
+            <article class="grid gap-4 py-5 md:grid-cols-2">
+            <h2 class="uppercase" id="feature-header"><?php the_title()?></h2>
+            <div class="flex flex-col">
+                <p class="mb-5 grow" id="feature-content"><?php echo get_field('excerpt')?>
+                </p>
+
+                <div class="details" id="feature-details">
+                <ul class="">
+                    <li><span>Author:</span> <?php echo get_field('author')->post_title?></li>
+                    <li><span>Date:</span> <?php echo get_the_date('j, F Y')?></li>
+                    <li><span>Duration:</span> <?php echo get_field('duration')?></li>
+                </ul>
+                <a href="#" class="category" id="feature-category"><?php echo get_the_terms($post->ID, 'categories')[0]->name?></a>
+                </div>
+            </div>
+            </article>
+            <div class="img-wrap">
+                <img
+                    src="<?php echo get_field('thumbnail')?>"
+                    alt=""
+                    class="w-full"
+                    id="feature-img"
+                />
+            </div>
+        </div>
+    </section>
+
+    <?php endwhile;
+        else : 
+            echo "No more posts :(";
+        endif;
+        wp_reset_postdata();
+    ?>
+
+    <section class="py-10 mb-10 articles">
+    <div class="container">
+        <div class="grid md:grid-cols-[1fr_300px] md:gap-20">
+        <div class="article-wrapper">
+            <div>
+            
+            <?php $magazine = new WP_Query(array(
+                'post_type' => 'magazines',
+                'posts_per_page' => 6,
+                'offset' => 1
+            ))?>
+
+            <?php if($magazine->have_posts()) : while($magazine->have_posts()) : ($magazine->the_post())?>
+                
+                <article
+                    class="grid md:grid-cols-[240px_1fr] gap-12 pb-10 mb-10 border-b border-dark"
+                >
+                    <div class="img-wrap">
+                    <img
+                        src="<?php echo get_field("thumbnail")?>"
+                        alt=""
+                        class="w-full h-[240px] object-cover"
+                    />
+                    </div>
+                    <div class="flex flex-col article-content">
+                    <div class="grow">
+                        <a href="articles-single.html" class="nav-linkitem">
+                        <h3 class="article-header"><?php the_title()?></h3>
+                        </a>
+                        <p class="mb-5"><?php echo get_field('excerpt')?>
+                        </p>
+                    </div>
+
+                    <div class="details">
+                        <ul>
+                        <li><span>Author:</span> <?php echo get_field('author')->post_title?></li>
+                        <li><span>Date:</span> <?php echo get_the_date('j, F Y')?></li>
+                        <li><span>Duration:</span> <?php echo get_field('duration')?></li>
+                        </ul>
+                        <a href="#" class="category"><?php print_r(get_the_terms($post->ID, 'categories')[0]->name)?></a>
+                    </div>
+                    </div>
+                </article>
+
+            <?php endwhile;
+                else : 
+                    echo "No more posts :(";
+                endif;
+                wp_reset_postdata();
+            ?>
+            </div>
+            <a href="<?php echo site_url('/magazines')?>" class="link-arrow"
+            >All Articles
+            <svg class="icon-sm" role="image">
+                <use xlink:href="./img/sprite.svg#icon-arrow-right"></use>
+            </svg>
+            </a>
+        </div>
+        <aside class="sticky top-0 self-start">
+            <h4 class="mb-5">Most Popular</h4>
+            <div class="popular-wrapper">
+
+
+            <?php $aside = new WP_Query(array(
+                'post_type' => 'magazines',
+                'posts_per_page' => 4,
+            ))?>
+
+            <?php 
+            $counter = 1;
+            if($aside->have_posts()) : while($aside->have_posts()) : ($aside->the_post())?> 
+
+            <div class="flex gap-5 pb-5 mb-5 border-b border-dark">
+                <p class="text-lg font-generalSemiBold">0<?php echo $counter++ ?></p>
+                <div>
+                <h5 class="text-lg font-generalSemiBold">
+                    <?php the_title()?>
+                </h5>
+                <small
+                    ><span class="pr-3 font-generalMedium">Author:</span>
+                    <?php get_field('author')?></small
+                >
+                </div>
+            </div>
+
+            <?php endwhile;
+                else : 
+                    echo "No more posts :(";
+                endif;
+                wp_reset_postdata();
+            ?>
+
+            <div class="p-4 newsletter">
+            <h5 class="uppercase font-generalSemiBold">newsletter</h5>
+            <h4>Design News to your inbox</h4>
+            <form action="" class="mt-5">
+                <input
+                type="text"
+                placeholder="Email"
+                class="mb-3 text-red-300 border border-gray-100"
+                />
+                <button
+                class="px-4 py-2 text-xs uppercase text-light bg-dark"
+                >
+                Sign Up
+                </button>
+            </form>
+            </div>
+        </aside>
+        </div>
+    </div>
+    </section>
+
+
+
+
+    <section class="mb-40 podcast">
+    <div class="container">
+        <div
+        class="flex items-center justify-between py-10 pb-20 border-t border-dark"
+        >
+        <h2 class="uppercase">Podcast</h2>
+        <a href="<?php echo site_url('/podcasts')?>" class="link-arrow right" id="podcast-link"
+            >All Episodes
+            <svg class="icon-sm" role="image">
+            <use xlink:href="./img/sprite.svg#icon-arrow-right"></use>
+            </svg>
+        </a>
+        </div>
+
+        <div
+        class="grid overflow-hidden border lg:grid-cols-3 border-dark podcast-grid"
+        >
+
+        <?php $podcast = new WP_Query(array(
+            'post_type' => 'podcasts',
+            'posts_per_page' => 6
+        ))?>
+
+        <?php if($podcast->have_posts()) : while($podcast->have_posts()) : ($podcast->the_post())?>
+
+
+        <div class="p-5 md:p-10 grid-item">
+            <span class="after"></span>
+            <span class="before"></span>
+            <div class="relative mb-5">
+            <img
+                src="<?php echo get_field('thumbnail')?>"
+                alt=""
+                class="object-cover w-full h-full"
+            />
+            <h3 class="absolute text-4xl text-white uppercase top-5 left-5">
+                Fyrre <span class="block text-lg">podcast</span>
+            </h3>
+            <p
+                class="absolute bottom-0 text-2xl text-white left-5 font-generalSemiBold"
+            >
+                EP 05
+            </p>
+            <a href="#" class="absolute right-5 bottom-5">
+                <svg class="icon-lg" role="image">
+                <use xlink:href="./img/sprite.svg#icon-podcast-arrow"></use>
+                </svg>
+            </a>
+            </div>
+
+            <h3 class="article-header">
+            <?php the_title()?>
+            </h3>
+
+            <div class="items-center justify-between md:flex">
+            <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
+                <li>
+                <span class="font-generalSemiBold">Date:</span> <?php echo get_the_date('j, F Y')?>
+                </li>
+                <li>
+                <span class="font-generalSemiBold">Duration:</span> <?php echo get_field('duration')?>
+                </li>
+            </ul>
+            </div>
+        </div>
+
+
+        <?php endwhile;
+            else : 
+                echo "No more posts :(";
+            endif;
+            wp_reset_postdata();
+        ?>
+
+        </div>
+    </div>
+    </section>
+
+
+
+
+
+    <section class="mb-40 author">
+    <div class="container">
+        <div
+        class="flex items-center justify-between py-10 pb-20 border-t border-dark"
+        >
+        <h2 class="uppercase">Author</h2>
+        <a href="#" class="link-arrow right" id="author-link"
+            >All Authors
+            <svg class="icon-sm" role="image">
+            <use xlink:href="./img/sprite.svg#icon-arrow-right"></use>
+            </svg>
+        </a>
+        </div>
+
+        <div
+        class="grid overflow-hidden border md:grid-cols-2 border-dark author-grid"
+        >
+        <div
+            class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
+        >
+            <span class="after"></span>
+            <span class="before"></span>
+            <div class="overflow-hidden rounded-full">
+            <img src="./img/author-1.jpg" alt="" />
+            </div>
+            <div>
+            <h3 class="article-header">Jakob Gronberg</h3>
+            <div class="items-center justify-between -mt-4 md:flex">
+                <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
+                <li>
+                    <span class="font-generalSemiBold">Job:</span> Artist
+                </li>
+                <li>
+                    <span class="font-generalSemiBold">City:</span> Berlin
+                </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+        <div
+            class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
+        >
+            <span class="after"></span>
+            <span class="before"></span>
+            <div class="overflow-hidden rounded-full">
+            <img src="./img/author-1.jpg" alt="" />
+            </div>
+            <div>
+            <h3 class="article-header">Jakob Gronberg</h3>
+            <div class="items-center justify-between -mt-4 md:flex">
+                <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
+                <li>
+                    <span class="font-generalSemiBold">Job:</span> Artist
+                </li>
+                <li>
+                    <span class="font-generalSemiBold">City:</span> Berlin
+                </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+        <div
+            class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
+        >
+            <span class="after"></span>
+            <span class="before"></span>
+            <div class="overflow-hidden rounded-full">
+            <img src="./img/author-1.jpg" alt="" />
+            </div>
+            <div>
+            <h3 class="article-header">Jakob Gronberg</h3>
+            <div class="items-center justify-between -mt-4 md:flex">
+                <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
+                <li>
+                    <span class="font-generalSemiBold">Job:</span> Artist
+                </li>
+                <li>
+                    <span class="font-generalSemiBold">City:</span> Berlin
+                </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+        <div
+            class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
+        >
+            <span class="after"></span>
+            <span class="before"></span>
+            <div class="overflow-hidden rounded-full">
+            <img src="./img/author-1.jpg" alt="" />
+            </div>
+            <div>
+            <h3 class="article-header">Jakob Gronberg</h3>
+            <div class="items-center justify-between -mt-4 md:flex">
+                <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
+                <li>
+                    <span class="font-generalSemiBold">Job:</span> Artist
+                </li>
+                <li>
+                    <span class="font-generalSemiBold">City:</span> Berlin
+                </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+
+    <footer class="bg-dark text-light footer">
+    <div class="overflow-hidden">
+        <p
+        class="flex gap-5 py-5 text-2xl whitespace-nowrap footer-marquee marquee"
+        >
+        <span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span
+        ><span>Newletter+++</span><span>Newletter+++</span>
+        </p>
+    </div>
+    <div class="container">
+        <div class="grid items-center py-40 md:grid-cols-2">
+        <h2 class="footer-header">Design News to your inbox</h2>
+        <form
+            id="form"
+            action=""
+            class="mt-5 max-w-[460px] w-full flex flex-col md:flex-row items-center gap-2 justify-self-end"
+        >
+            <input
+            type="text"
+            placeholder="Email"
+            class="w-full px-2 py-2 text-xs border border-gray-100 placeholder:opacity-40 text-dark"
+            />
+            <button
+            class="w-full px-4 py-2 text-xs uppercase bg-light text-dark whitespace-nowrap md:w-auto"
+            >
+            Sign Up
+            </button>
+        </form>
+        </div>
+
+        <div
+        class="grid md:grid-cols-[1.3fr_1fr_1fr_1fr] mb-20 gap-5 footer-links"
+        >
+        <a href="#" class="uppercase logo font-generalSemiBold"
+            >Fyrre Magazine</a
+        >
+        <ul>
+            <li><a href="#">Art</a></li>
+            <li><a href="#">Design</a></li>
+            <li><a href="#">Architecture</a></li>
+        </ul>
+        <ul>
+            <li><a href="#">Magazine</a></li>
+            <li><a href="#">Podcast</a></li>
+            <li><a href="#">Authors</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">X</a></li>
+            <li><a href="#">Instagram</a></li>
+        </ul>
+        </div>
+
+        <p class="p-2 mb-0 text-center copyright">
+        &copy; 2025 All Right Reserved
+        </p>
+    </div>
+    </footer>
+</main>
+
+
+<?php get_footer()?>
