@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?php is_front_page() ? blogInfo('title') : wp_title()?></title>
+    <title><?php is_front_page() ? blogInfo('title') : wp_title('')?></title>
     <?php wp_head()?>
   </head>
   <body data-barba="wrapper">
@@ -16,7 +16,7 @@
         <div
           class="relative flex items-center justify-between pt-8 pb-2 border-b border-dark"
         >
-          <a href="index.html" class="uppercase font-generalSemiBold">
+          <a href="<?php echo site_url("/")?>" class="uppercase font-generalSemiBold">
             fyrre magazine</a
           >
 
@@ -48,21 +48,21 @@
               <li>
                 <a
                   class="font-generalSemiBold nav-linkitem uppercase text-[clamp(2rem,_10vw,_8rem)]"
-                  href="<?php echo site_url('magazines')?>"
+                  href="<?php echo site_url('magazine')?>"
                   >Articles</a
                 >
               </li>
               <li>
                 <a
                   class="font-generalSemiBold nav-linkitem uppercase text-[clamp(2rem,_10vw,_8rem)]"
-                  href="<?php echo site_url('podcasts')?>"
+                  href="<?php echo site_url('podcast')?>"
                   >Podcasts</a
                 >
               </li>
               <li>
                 <a
                   class="font-generalSemiBold nav-linkitem uppercase text-[clamp(2rem,_10vw,_8rem)]"
-                  href="<?php echo site_url('authors')?>"
+                  href="<?php echo site_url('author')?>"
                   >Authors</a
                 >
               </li>

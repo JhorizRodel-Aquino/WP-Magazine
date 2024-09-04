@@ -97,7 +97,7 @@
                     </div>
                     <div class="flex flex-col article-content">
                     <div class="grow">
-                        <a href="articles-single.html" class="nav-linkitem">
+                        <a href="<?php the_permalink()?>" class="nav-linkitem">
                         <h3 class="article-header"><?php the_title()?></h3>
                         </a>
                         <p class="mb-5"><?php echo get_field('excerpt')?>
@@ -122,10 +122,10 @@
                 wp_reset_postdata();
             ?>
             </div>
-            <a href="<?php echo site_url('/magazines')?>" class="link-arrow"
+            <a href="<?php echo site_url('/magazine')?>" class="link-arrow"
             >All Articles
             <svg class="icon-sm" role="image">
-                <use xlink:href="./img/sprite.svg#icon-arrow-right"></use>
+                <use xlink:href="<?php echo get_template_directory_uri()?>/img/sprite.svg#icon-arrow-right"></use>
             </svg>
             </a>
         </div>
@@ -184,9 +184,6 @@
     </div>
     </section>
 
-
-
-
     <section class="mb-40 podcast">
     <div class="container">
         <div
@@ -196,7 +193,7 @@
         <a href="<?php echo site_url('/podcasts')?>" class="link-arrow right" id="podcast-link"
             >All Episodes
             <svg class="icon-sm" role="image">
-            <use xlink:href="./img/sprite.svg#icon-arrow-right"></use>
+            <use xlink:href="<?php echo get_template_directory_uri()?>/img/sprite.svg#icon-arrow-right"></use>
             </svg>
         </a>
         </div>
@@ -232,7 +229,7 @@
             </p>
             <a href="#" class="absolute right-5 bottom-5">
                 <svg class="icon-lg" role="image">
-                <use xlink:href="./img/sprite.svg#icon-podcast-arrow"></use>
+                <use xlink:href="<?php echo get_template_directory_uri()?>/img/sprite.svg#icon-podcast-arrow"></use>
                 </svg>
             </a>
             </div>
@@ -268,17 +265,16 @@
 
 
 
-
     <section class="mb-40 author">
     <div class="container">
         <div
         class="flex items-center justify-between py-10 pb-20 border-t border-dark"
         >
         <h2 class="uppercase">Author</h2>
-        <a href="#" class="link-arrow right" id="author-link"
+        <a href="<?php echo site_url('/author')?>" class="link-arrow right" id="author-link"
             >All Authors
             <svg class="icon-sm" role="image">
-            <use xlink:href="./img/sprite.svg#icon-arrow-right"></use>
+            <use xlink:href="<?php echo get_template_directory_uri()?>/img/sprite.svg#icon-arrow-right"></use>
             </svg>
         </a>
         </div>
@@ -286,171 +282,51 @@
         <div
         class="grid overflow-hidden border md:grid-cols-2 border-dark author-grid"
         >
-        <div
-            class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
-        >
-            <span class="after"></span>
-            <span class="before"></span>
-            <div class="overflow-hidden rounded-full">
-            <img src="./img/author-1.jpg" alt="" />
-            </div>
-            <div>
-            <h3 class="article-header">Jakob Gronberg</h3>
-            <div class="items-center justify-between -mt-4 md:flex">
-                <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
-                <li>
-                    <span class="font-generalSemiBold">Job:</span> Artist
-                </li>
-                <li>
-                    <span class="font-generalSemiBold">City:</span> Berlin
-                </li>
-                </ul>
-            </div>
-            </div>
-        </div>
 
-        <div
-            class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
-        >
-            <span class="after"></span>
-            <span class="before"></span>
-            <div class="overflow-hidden rounded-full">
-            <img src="./img/author-1.jpg" alt="" />
-            </div>
-            <div>
-            <h3 class="article-header">Jakob Gronberg</h3>
-            <div class="items-center justify-between -mt-4 md:flex">
-                <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
-                <li>
-                    <span class="font-generalSemiBold">Job:</span> Artist
-                </li>
-                <li>
-                    <span class="font-generalSemiBold">City:</span> Berlin
-                </li>
-                </ul>
-            </div>
-            </div>
-        </div>
+        <?php $author = new WP_Query(array(
+            'post_type' => 'authors',
+            'posts_per_page' => 4
+        ))?>
+        <?php if($author->have_posts()) : while($author->have_posts()) : ($author->the_post())?>
 
-        <div
-            class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
-        >
-            <span class="after"></span>
-            <span class="before"></span>
-            <div class="overflow-hidden rounded-full">
-            <img src="./img/author-1.jpg" alt="" />
+            <div
+                class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
+            >
+                <span class="after"></span>
+                <span class="before"></span>
+                <div class="overflow-hidden rounded-full">
+                <img src="<?php echo get_field('thumbnail')['url']?>" alt="" />
+                </div>
+                <div>
+                <h3 class="article-header"><?php the_title()?></h3>
+                <div class="items-center justify-between -mt-4 md:flex">
+                    <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
+                    <li>
+                        <span class="font-generalSemiBold">Job:</span> <?php the_field('job')?>
+                    </li>
+                    <li>
+                        <span class="font-generalSemiBold">City:</span> <?php the_field('city')?>
+                    </li>
+                    </ul>
+                </div>
+                </div>
             </div>
-            <div>
-            <h3 class="article-header">Jakob Gronberg</h3>
-            <div class="items-center justify-between -mt-4 md:flex">
-                <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
-                <li>
-                    <span class="font-generalSemiBold">Job:</span> Artist
-                </li>
-                <li>
-                    <span class="font-generalSemiBold">City:</span> Berlin
-                </li>
-                </ul>
-            </div>
-            </div>
-        </div>
+            
 
-        <div
-            class="flex flex-col items-center gap-5 p-10 grid-item md:flex-row"
-        >
-            <span class="after"></span>
-            <span class="before"></span>
-            <div class="overflow-hidden rounded-full">
-            <img src="./img/author-1.jpg" alt="" />
-            </div>
-            <div>
-            <h3 class="article-header">Jakob Gronberg</h3>
-            <div class="items-center justify-between -mt-4 md:flex">
-                <ul class="items-center gap-8 mb-5 md:mb-0 md:flex">
-                <li>
-                    <span class="font-generalSemiBold">Job:</span> Artist
-                </li>
-                <li>
-                    <span class="font-generalSemiBold">City:</span> Berlin
-                </li>
-                </ul>
-            </div>
-            </div>
-        </div>
+        <?php endwhile;
+            else : 
+                echo "No more posts :(";
+            endif;
+            wp_reset_postdata();
+        ?>
+        
         </div>
     </div>
     </section>
 
-    <footer class="bg-dark text-light footer">
-    <div class="overflow-hidden">
-        <p
-        class="flex gap-5 py-5 text-2xl whitespace-nowrap footer-marquee marquee"
-        >
-        <span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span
-        ><span>Newletter+++</span><span>Newletter+++</span>
-        </p>
-    </div>
-    <div class="container">
-        <div class="grid items-center py-40 md:grid-cols-2">
-        <h2 class="footer-header">Design News to your inbox</h2>
-        <form
-            id="form"
-            action=""
-            class="mt-5 max-w-[460px] w-full flex flex-col md:flex-row items-center gap-2 justify-self-end"
-        >
-            <input
-            type="text"
-            placeholder="Email"
-            class="w-full px-2 py-2 text-xs border border-gray-100 placeholder:opacity-40 text-dark"
-            />
-            <button
-            class="w-full px-4 py-2 text-xs uppercase bg-light text-dark whitespace-nowrap md:w-auto"
-            >
-            Sign Up
-            </button>
-        </form>
-        </div>
 
-        <div
-        class="grid md:grid-cols-[1.3fr_1fr_1fr_1fr] mb-20 gap-5 footer-links"
-        >
-        <a href="#" class="uppercase logo font-generalSemiBold"
-            >Fyrre Magazine</a
-        >
-        <ul>
-            <li><a href="#">Art</a></li>
-            <li><a href="#">Design</a></li>
-            <li><a href="#">Architecture</a></li>
-        </ul>
-        <ul>
-            <li><a href="#">Magazine</a></li>
-            <li><a href="#">Podcast</a></li>
-            <li><a href="#">Authors</a></li>
-        </ul>
 
-        <ul>
-            <li><a href="#">Facebook</a></li>
-            <li><a href="#">X</a></li>
-            <li><a href="#">Instagram</a></li>
-        </ul>
-        </div>
 
-        <p class="p-2 mb-0 text-center copyright">
-        &copy; 2025 All Right Reserved
-        </p>
-    </div>
-    </footer>
 </main>
 
 
